@@ -455,20 +455,20 @@
 
                             <div class="post-media">
                                 <div class="custom-video-container ad-video">
-                                    <video 
+                                    <iframe 
                                         id="nyuVideo"
                                         class="post-video" 
-                                        src="assets/videos/nyu ad 1.mp4"
-                                        muted
-                                        playsinline
-                                        loop>
-                                    </video>
+                                        src="https://www.youtube.com/embed/GFj4m6JDc5s?enablejsapi=1&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&fs=0&disablekb=1&loop=1&playlist=GFj4m6JDc5s&mute=1&autoplay=1"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen>
+                                    </iframe>
                                     
                                     <!-- Video Controls Overlay -->
                                     <div class="video-controls-overlay">
                                         <div class="mute-toggle-overlay" id="mute-toggle">
                                             <svg viewBox="0 0 24 24">
-                                                <path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93l-1.41 1.41C19.1 7.79 20 9.79 20 12s-.9 4.21-2.34 5.66l1.41 1.41C20.88 17.26 22 14.76 22 12s-1.12-5.26-2.93-7.07zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                                                <path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-2 2-2-2-2 2 2 2-2 2 2 2 2-2 2 2 2-2-2-2 2-2z"/>
                                             </svg>
                                         </div>
                                     </div>
@@ -520,20 +520,15 @@
     </div>
 
     <script>
-        // Initialize video tracking after DOM is loaded
+        // Initialize feed video tracking after DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             console.log('NYU Feed Video Ad - DOM loaded');
             
             // Tap to Start functionality
             const tapToStartOverlay = document.getElementById('tap-to-start-overlay');
             tapToStartOverlay.addEventListener('click', () => {
-                console.log('Tap to start clicked - Video tracking enabled');
+                console.log('Tap to start clicked - YouTube tracking enabled');
                 tapToStartOverlay.classList.add('hidden');
-                
-                // Initialize video tracking
-                if (window.VideoTracker && window.VideoTracker.initializeVideo) {
-                    window.VideoTracker.initializeVideo();
-                }
             });
 
             // Return to Survey functionality
@@ -549,9 +544,12 @@
                 }
             });
 
-            // Mute toggle functionality
+            // YouTube iframe mute toggle via overlay
             const muteToggle = document.getElementById('mute-toggle');
             if (muteToggle) {
+                muteToggle.style.pointerEvents = 'auto';
+                muteToggle.style.opacity = '0.1'; // Slightly visible for clicking
+                
                 muteToggle.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -559,7 +557,6 @@
                     if (window.VideoTracker && window.VideoTracker.toggleMute) {
                         window.VideoTracker.toggleMute();
                         
-                        // Show mute toggle briefly
                         muteToggle.classList.add('visible');
                         setTimeout(() => {
                             muteToggle.classList.remove('visible');
@@ -579,10 +576,10 @@
                         window.GALite.track('cta_click', {
                             cta_type: action,
                             post_type: 'video',
-                            post_id: 'nyu_video_ad',
+                            post_id: 'nyu_feed_video_ad',
                             username: 'nyu_stern',
                             content_type: 'sponsored_video',
-                            study_id: 'instagram_study'
+                            study_id: 'instagram_feed_video_study'
                         });
                     }
                     
@@ -593,3 +590,4 @@
     </script>
 </body>
 </html>
+
