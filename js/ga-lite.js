@@ -4,7 +4,7 @@
  */
 
 // Configuration
-const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'; // Placeholder - will be updated with actual ID
+const GA_MEASUREMENT_ID = 'G-GHYPLRCS4Z'; // Feed Video Study Measurement ID
 const PROLIFIC_ID_KEY = 'prolific_id';
 
 // Global state
@@ -143,3 +143,4 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Failed to initialize GA4:', error);
     });
 });
+
