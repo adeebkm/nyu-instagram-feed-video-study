@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>NYU Feed Video Ad - Instagram Study</title>
+    
+    <!-- Google Analytics 4 -->
+    <script src="js/ga-lite.js"></script>
+    <script src="js/ga-video.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #fafafa;
+            color: #262626;
+            line-height: 1.4;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            height: 100vh;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Feed Page */
+        .feed-page {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #fafafa;
+        }
+
+        .feed-container {
+            max-width: 614px;
+            margin: 0 auto;
+            padding: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Instagram Header */
+        .ig-header {
+            background: #fff;
+            border-bottom: 1px solid #dbdbdb;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .ig-logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .header-icons svg {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        /* Posts Container */
+        .posts-container {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        /* Post Styling */
+        .post {
+            background: #fff;
+            border: 1px solid #dbdbdb;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .post-header {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .post-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .post-user img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .username {
+            font-weight: 600;
+            font-size: 14px;
+            color: #262626;
+            text-decoration: none;
+        }
+
+        .location {
+            font-size: 12px;
+            color: #737373;
+        }
+
+        .post-options {
+            cursor: pointer;
+        }
+
+        .post-media {
+            position: relative;
+        }
+
+        .post-image, .post-video {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-width: 100%;
+        }
+
+        .post-video {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+        }
+
+        /* Mobile responsive media */
+        @media (max-width: 480px) {
+            .post-image, .post-video {
+                width: 100vw;
+                max-width: 100vw;
+                height: auto;
+            }
+            
+            .post-media {
+                margin: 0 -16px;
+            }
+            
+            .feed-container {
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .post {
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+                margin-bottom: 0;
+                border-bottom: 8px solid #fafafa;
+            }
+            
+            .custom-video-container {
+                width: 100vw;
+                margin-left: calc(-50vw + 50%);
+            }
+        }
+
+        /* Specific styling for ad videos to prevent cropping */
+        .custom-video-container.ad-video {
+            width: 100%;
+        }
+        
+        .custom-video-container.ad-video .post-video {
+            width: 100%;
+            height: auto;
+            min-height: 750px;
+        }
+
+        .custom-video-container {
+            position: relative;
+            width: 100%;
+        }
+
+        /* Post Actions */
+        .post-actions {
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .bookmark-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .bookmark-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Post Info */
+        .post-info {
+            padding: 0 16px 12px;
+        }
+
+        .likes {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .caption {
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .caption .username {
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .view-comments {
+            color: #737373;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .timestamp {
+            color: #737373;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+
+        /* Tap to Start Overlay */
+        .tap-to-start-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .tap-to-start-overlay.hidden {
+            display: none;
+        }
+
+        .tap-to-start-text {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .tap-to-start-subtext {
+            font-size: 16px;
+            opacity: 0.8;
+            max-width: 300px;
+            line-height: 1.4;
+        }
+
+        /* Return to Survey Button */
+        .return-survey-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .return-survey-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.05);
+        }
+        
+        .return-survey-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Video Controls Overlay */
+        .video-controls-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .mute-toggle-overlay {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 50%;
+            padding: 8px;
+            cursor: pointer;
+            pointer-events: auto;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 20;
+        }
+
+        .mute-toggle-overlay.visible {
+            opacity: 1 !important;
+            pointer-events: auto;
+        }
+
+        .mute-toggle-overlay svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        /* Video click blocker */
+        .video-click-blocker {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: auto;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Tap to Start Overlay -->
+        <div class="tap-to-start-overlay" id="tap-to-start-overlay">
+            <div class="tap-to-start-text">Tap to Start</div>
+            <div class="tap-to-start-subtext">Begin the Instagram feed experience</div>
+        </div>
+
+        <!-- Return to Survey Button -->
+        <button class="return-survey-btn" id="return-survey-btn">
+            ← Return to Survey
+        </button>
+
+        <div class="main-content">
+            <!-- Feed Page -->
+            <div class="feed-page">
+                <div class="feed-container">
+                    <div class="ig-header">
+                        <div class="ig-logo">Instagram</div>
+                        <div class="header-icons">
+                            <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24">
+                                <path d="M12.003 2.001c-.518 0-1.018.044-1.5.132-3.314.613-5.876 3.058-6.498 6.372-.09.479-.135.979-.135 1.495 0 .516.045 1.016.135 1.495.622 3.314 3.184 5.759 6.498 6.372.482.088.982.132 1.5.132s1.018-.044 1.5-.132c3.314-.613 5.876-3.058 6.498-6.372.09-.479.135-.979.135-1.495 0-.516-.045-1.016-.135-1.495-.622-3.314-3.184-5.759-6.498-6.372-.482-.088-.982-.132-1.5-.132zm0 1.5c.414 0 .815.035 1.201.105 2.579.475 4.628 2.401 5.196 4.98.069.386.104.787.104 1.201s-.035.815-.104 1.201c-.568 2.579-2.617 4.505-5.196 4.98-.386.07-.787.105-1.201.105s-.815-.035-1.201-.105c-2.579-.475-4.628-2.401-5.196-4.98-.069-.386-.104-.787-.104-1.201s.035-.815.104-1.201c.568-2.579 2.617-4.505 5.196-4.98.386-.07.787-.105 1.201-.105z"/>
+                                <path d="m17.5 4.5c-.276 0-.5.224-.5.5s.224.5.5.5.5-.224.5-.5-.224-.5-.5-.5z"/>
+                                <path d="M12.003 7.001c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5zm0 1.5c1.933 0 3.5 1.567 3.5 3.5s-1.567 3.5-3.5 3.5-3.5-1.567-3.5-3.5 1.567-3.5 3.5-3.5z"/>
+                            </svg>
+                            <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24">
+                                <path d="M12.003 1.999c5.514 0 9.998 4.486 9.998 10.001 0 5.514-4.484 10.001-9.998 10.001s-10.002-4.487-10.002-10.001c0-5.515 4.488-10.001 10.002-10.001zm0 1.5c-4.686 0-8.502 3.816-8.502 8.501s3.816 8.501 8.502 8.501 8.498-3.816 8.498-8.501-3.812-8.501-8.498-8.501z"/>
+                                <path d="M12.003 7.001c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5zm0 1.5c1.933 0 3.5 1.567 3.5 3.5s-1.567 3.5-3.5 3.5-3.5-1.567-3.5-3.5 1.567-3.5 3.5-3.5z"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Posts Container -->
+                    <div class="posts-container">
+                        <!-- NYU Video Ad Post -->
+                        <div class="post" id="nyu-video-post">
+                            <div class="post-header">
+                                <div class="post-user">
+                                    <img src="assets/images/nyupfp.png" alt="NYU Stern">
+                                    <div class="user-info">
+                                        <a href="#" class="username">nyu_stern</a>
+                                        <div class="location">Sponsored</div>
+                                    </div>
+                                </div>
+                                <div class="post-options">
+                                    <svg fill="currentColor" height="16" viewBox="0 0 24 24" width="16">
+                                        <circle cx="12" cy="12" r="1.5"/>
+                                        <circle cx="6" cy="12" r="1.5"/>
+                                        <circle cx="18" cy="12" r="1.5"/>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="post-media">
+                                <div class="custom-video-container ad-video">
+                                    <video 
+                                        id="nyuVideo"
+                                        class="post-video" 
+                                        src="assets/videos/nyu ad 1.mp4"
+                                        muted
+                                        playsinline
+                                        loop>
+                                    </video>
+                                    
+                                    <!-- Video Controls Overlay -->
+                                    <div class="video-controls-overlay">
+                                        <div class="mute-toggle-overlay" id="mute-toggle">
+                                            <svg viewBox="0 0 24 24">
+                                                <path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93l-1.41 1.41C19.1 7.79 20 9.79 20 12s-.9 4.21-2.34 5.66l1.41 1.41C20.88 17.26 22 14.76 22 12s-1.12-5.26-2.93-7.07zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    <!-- Video click blocker -->
+                                    <div class="video-click-blocker"></div>
+                                </div>
+                            </div>
+
+                            <div class="post-actions">
+                                <div class="action-buttons">
+                                    <button class="action-btn like-btn" data-action="like">
+                                        <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="action-btn comment-btn" data-action="comment">
+                                        <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 3.04 1.05 4.35L1 22l5.65-2.05C8.96 21.64 10.46 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.4 0-2.76-.3-4-.85L6 20l.85-2c-.55-1.24-.85-2.6-.85-4 0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="action-btn share-btn" data-action="share">
+                                        <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24">
+                                            <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.50-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <button class="bookmark-btn" data-action="bookmark">
+                                    <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24">
+                                        <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="post-info">
+                                <div class="likes">3,456 likes</div>
+                                <div class="caption">
+                                    <span class="username">nyu_stern</span>
+                                    NYU Stern MBA: Global Impact Starts Here 🌍 Join the next generation of business leaders! #NYUStern #MBA #Leadership
+                                </div>
+                                <div class="view-comments">View all 189 comments</div>
+                                <div class="timestamp">2 hours ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize video tracking after DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('NYU Feed Video Ad - DOM loaded');
+            
+            // Tap to Start functionality
+            const tapToStartOverlay = document.getElementById('tap-to-start-overlay');
+            tapToStartOverlay.addEventListener('click', () => {
+                console.log('Tap to start clicked - Video tracking enabled');
+                tapToStartOverlay.classList.add('hidden');
+                
+                // Initialize video tracking
+                if (window.VideoTracker && window.VideoTracker.initializeVideo) {
+                    window.VideoTracker.initializeVideo();
+                }
+            });
+
+            // Return to Survey functionality
+            const returnSurveyBtn = document.getElementById('return-survey-btn');
+            returnSurveyBtn.addEventListener('click', () => {
+                // Simple navigation back to previous page
+                if (document.referrer && document.referrer !== window.location.href) {
+                    // Go back to the page that linked here
+                    window.location.href = document.referrer;
+                } else {
+                    // Fallback: use browser back button
+                    window.history.back();
+                }
+            });
+
+            // Mute toggle functionality
+            const muteToggle = document.getElementById('mute-toggle');
+            if (muteToggle) {
+                muteToggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    if (window.VideoTracker && window.VideoTracker.toggleMute) {
+                        window.VideoTracker.toggleMute();
+                        
+                        // Show mute toggle briefly
+                        muteToggle.classList.add('visible');
+                        setTimeout(() => {
+                            muteToggle.classList.remove('visible');
+                        }, 1000);
+                    }
+                });
+            }
+
+            // CTA click tracking
+            const actionButtons = document.querySelectorAll('.action-btn, .bookmark-btn');
+            actionButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const action = button.dataset.action;
+                    
+                    if (window.GALite && window.GALite.track) {
+                        window.GALite.track('cta_click', {
+                            cta_type: action,
+                            post_type: 'video',
+                            post_id: 'nyu_video_ad',
+                            username: 'nyu_stern',
+                            content_type: 'sponsored_video',
+                            study_id: 'instagram_study'
+                        });
+                    }
+                    
+                    console.log(`CTA clicked: ${action}`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
