@@ -63,10 +63,10 @@
     }
     
     /**
-     * Initialize GA4 with gtag.js
+     * Initialize GA4 with user identification
      */
     function initializeGA() {
-        return new Promise((resolve, reject) => {
+        if (!window.GALite.isLoaded) {
             try {
                 // Get user ID
                 window.GALite.userId = getProlificId();
@@ -75,17 +75,16 @@
                 const script = document.createElement('script');
                 script.async = true;
                 script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-                script.onerror = () => reject(new Error('Failed to load gtag.js'));
+                document.head.appendChild(script);
                 
-                script.onload = () => {
-                    // Initialize gtag
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
-                    window.gtag = gtag;
-                    
-                    gtag('js', new Date());
-                    
-                    // Configure GA with user_id if available
+                // Initialize gtag
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                window.gtag = gtag;
+                
+                gtag('js', new Date());
+                
+                script.onload = function() {
                     const config = {
                         send_page_view: true,
                         debug_mode: false
@@ -99,15 +98,13 @@
                     gtag('config', GA_MEASUREMENT_ID, config);
                     
                     window.GALite.isLoaded = true;
-                    resolve();
+                    console.log('✅ GA4 initialized successfully with user ID:', window.GALite.userId);
                 };
                 
-                document.head.appendChild(script);
-                
             } catch (error) {
-                reject(error);
+                console.error('❌ Error initializing GA4:', error);
             }
-        });
+        }
     }
     
     /**
@@ -115,7 +112,9 @@
      */
     function track(eventName, parameters = {}) {
         if (!window.GALite.isLoaded || typeof window.gtag !== 'function') {
-            return; // Fail silently if GA is blocked
+            console.warn('GA4 not loaded yet, queuing event:', eventName);
+            setTimeout(() => track(eventName, parameters), 100);
+            return;
         }
         
         try {
@@ -129,48 +128,22 @@
             }
             
             window.gtag('event', eventName, eventData);
+            console.log('📊 Event tracked:', eventName, eventData);
+            
         } catch (error) {
-            // Fail silently - no console errors
+            console.error('❌ Error tracking event:', eventName, error);
         }
     }
     
-    /**
-     * Track page view
-     */
-    function trackPageView(pageTitle = document.title, pagePath = window.location.pathname) {
-        track('page_view', {
-            page_title: pageTitle,
-            page_location: window.location.href,
-            page_path: pagePath
-        });
-    }
-    
-    // Expose public API
-    window.GALite.init = initializeGA;
+    // Expose functions globally
+    window.GALite.initialize = initializeGA;
     window.GALite.track = track;
-    window.GALite.trackPageView = trackPageView;
-    
-    // No localStorage storage - each session is independent
-    
-    // Clear any existing stored PROLIFIC_ID on page load (for research study independence)
-    try {
-        localStorage.removeItem(PROLIFIC_ID_KEY);
-        console.log('Cleared any existing PROLIFIC_ID for fresh session');
-    } catch (e) {
-        // Fail silently
-    }
     
     // Auto-initialize when DOM is ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeGA().catch(() => {
-                // Fail silently if GA initialization fails
-            });
-        });
+        document.addEventListener('DOMContentLoaded', initializeGA);
     } else {
-        initializeGA().catch(() => {
-            // Fail silently if GA initialization fails
-        });
+        initializeGA();
     }
     
 })();
